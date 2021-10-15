@@ -1,0 +1,23 @@
+Priorité 1 : 
+Organiser réu avec Yann & Jéremy (ajouter sébastien
+APS panne de la com 
+	Définir origine panne 
+	Quel fréquences d'envoie données 
+	Ajuster moment d'envoie & établir fréquences d'envoie plus faible 	
+
+Tache de fond :
+Script (code associé)
+Vérifier et compléter le document Excel "MVB_and_CAN-mapping-RD_Angers" 
+en fonction des valeurs télémétrique issue du Railster
+
+
+Tache 2
+Effectuer une comparaison entres informations issue du tram & railster
+Comparée vitesse observé & réelle, ajuster capteurs de vitesse (odométrique
+
+Tache 3
+---Vérifier la priorité des trams aux feux--
+référencer position feux tricolores longitude/latitude entres 2 stations
+(vérifié si ils existent dans la GMAO Angers avant)
+
+
