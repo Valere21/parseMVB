@@ -3,22 +3,23 @@
 
 #include <QDebug>
 #include <QFile>
-
+#include <QPair>
 
 
 class CSVFile
 {
 public:
     CSVFile();
-    void getCSVRef(QString path);
-    void modifyDoc();
-    void fillListColumnName();
 
+    void modifyDoc();
+    void fillColumnName();
+    void fillListColumnName();
 private:
 
-    QList<QString> m_listColumnName;
+     QList<QPair<QString,int*>> m_listColumnName;
+     QPair<QString,int*> m_pairColumn;
     QFile *m_fileRef = nullptr;
-
+    QFile *m_fileDest = nullptr;
 };
 
 #endif // CSVFILE_H
