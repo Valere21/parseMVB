@@ -37,24 +37,31 @@ void CSVFile::fillColumnName(){
     qDebug() << Q_FUNC_INFO;
 
     int index = 0;
-    while (!m_fileRef->atEnd()){
-        QByteArray line = m_fileRef->readLine();
 
-        while(line.contains(';') && line.contains('\n')){
-            QString *newColumn = new QString(line.left(line.indexOf(';')));
-            line = line.remove(0,line.indexOf(';')+1);
-            m_pairColumn.first = *newColumn;
-            m_listColumnName.append(m_pairColumn);
-            delete newColumn;
-            index++;
-        }
+    QByteArray line = m_fileRef->readLine();
 
-        qDebug() << "size list " << m_listColumnName.size();
-        for (int i = 0; i < m_listColumnName.size(); i++) qDebug() << "column name: " << m_listColumnName.at(i);
+    while(line.contains(';') && line.contains('\n')){
+        QString *newColumn = new QString(line.left(line.indexOf(';')));
+        line = line.remove(0,line.indexOf(';')+1);
+        m_pairColumn.first = *newColumn;
+        m_listColumnName.append(m_pairColumn);
+        delete newColumn;
+        index++;
     }
+    qDebug() << m_fileRef->size();
+    m_fileRef->remove(line);
+    qDebug() << m_fileRef->size();
+
+    qDebug() << "size list " << m_listColumnName.size();
+    for (int i = 0; i < m_listColumnName.size(); i++) qDebug() << "column name: " << m_listColumnName.at(i);
 }
 
+void CSVFile::fillData(){
 
+
+
+
+}
 
 
 

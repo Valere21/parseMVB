@@ -14,10 +14,13 @@ public:
     void modifyDoc();
     void fillColumnName();
     void fillListColumnName();
+    void fillData();
+
 private:
 
-     QList<QPair<QString,int*>> m_listColumnName;
-     QPair<QString,int*> m_pairColumn;
+    QList<QPair<QString,int*>> m_listColumnName;
+    QPair<QString,int*> m_pairColumn;
+
     QFile *m_fileRef = nullptr;
     QFile *m_fileDest = nullptr;
 };
