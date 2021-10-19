@@ -15,7 +15,10 @@ public:
     void fillColumnName();
     void fillListColumnName();
     void fillData(QString line);
+<<<<<<< HEAD
     void recursiveRegistration(QString line, int indexLine, int indexColumn);
+=======
+>>>>>>> 496eead1288650b2f287ad287a0c0f7142d34941
 
 private:
 
