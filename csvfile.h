@@ -13,9 +13,9 @@ public:
 
     void modifyDoc();
     void fillColumnName();
-    void fillListColumnName();
     void fillData(QString line);
     void recursiveRegistration(QString line, int indexLine, int indexColumn);
+    void displayList(QList<QPair<QString,QList<QString>>> listColumnName);
 
 private:
 
