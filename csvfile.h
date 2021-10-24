@@ -11,19 +11,24 @@ class CSVFile
 public:
     CSVFile();
 
-    void modifyDoc();
-    void fillColumnName();
-    void fillData(QString line);
-    void recursiveRegistration(QString line, int indexLine, int indexColumn);
-    void displayList(QList<QPair<QString,QList<QString>>> listColumnName);
+//    void modifyDoc();
+//    void fillColumnName();
+//    void fillData(QString line);
+//    void recursiveRegistration(QString line, int indexLine, int indexColumn);
+//    void displayList(QList<QPair<QString,QList<QString>>> listColumnName);
+    void recursiveGetValue(QString lin);
+    void getName();
+
 
 private:
 
-    QList<QPair<QString,QList<QString>>> m_listColumnName;
-    QPair<QString,QList<QString>> *m_pairColumn = nullptr;
+//    QList<QPair<QString,QList<QString>>> m_listColumnName;
+//    QPair<QString,QList<QString>> *m_pairColumn = nullptr;
 
     QFile *m_fileRef = nullptr;
     QFile *m_fileDest = nullptr;
+
+    QStringList m_nameColumn;
 
     int m_nbrLigne;
     int m_nbrColonne;

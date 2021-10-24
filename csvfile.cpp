@@ -4,90 +4,149 @@
 using namespace std;
 CSVFile::CSVFile()
 {
-
-    m_fileRef = new QFile(QString::fromStdString("C:/QtProject/parseLogMVB/telematics2.csv"));
+    m_fileRef = new QFile(QString::fromStdString("C:/QtProject/parseMVB/telematics.csv"));
     if (m_fileRef->open((QIODevice::ReadWrite))) qDebug() << "Ouverture ok du fichier";
-    fillColumnName();
+
+    getName();
+    //    fillColumnName();
 }
 
-void CSVFile::fillColumnName(){
+void CSVFile::getName(){
 
-
+    QByteArray str = m_fileRef->readLine();
+    QString line = str;
     int index = 0;
-    QString line = m_fileRef->readLine();
-
-    while(line.contains(';') || line.contains('\n')){
-
-        m_pairColumn = new QPair<QString, QList<QString>>;
-        if (line.contains(';')){
-            m_pairColumn->first = line.left(line.indexOf(';'));
-
-            line = line.remove(0,line.indexOf(';')+1);
-            m_listColumnName.append(*m_pairColumn);
-
-        }
-        else {
-            m_pairColumn->first = line.left(line.indexOf('\r'));
-            line = line.remove(0,line.indexOf('\r')+2);
-            m_listColumnName.append(*m_pairColumn);
-        }
-        delete m_pairColumn;
+    bool flag = false;
+    while(line.contains(';')){
+        m_nameColumn.append(line.left(line.indexOf(';')));
+        line = line.remove(0,line.indexOf(';')+1);
         index++;
     }
-//    for (int i = 0; i < m_listColumnName.size(); i++) qDebug() << "column name: " << m_listColumnName.at(i);
+    m_nameColumn.append(line.left(line.indexOf('\r')));
+    line = line.remove(0,line.indexOf('\r')+2);
+
+    qDebug() << m_fileRef->size();
+
+    while (!m_fileRef->atEnd()){
+
+        line = m_fileRef->readLine();
+        QStringList list1 = line.split(QLatin1Char(';'));
+        for (int i = 0; i < list1.size(); i++){
+            m_nameColumn.replace(i,m_nameColumn.at(i) + '\n' + line.at(i));
+        }
+    }
+
+    for (int i = 0; i < m_nameColumn.size(); i++){
+                qDebug() << m_nameColumn.at(i);
+    }
+}
+
+void CSVFile::recursiveGetValue(QString line){
+
+    qDebug() << Q_FUNC_INFO;
+
+
+
+    while (!m_fileRef->atEnd()){
+
+
+        QStringList list1 = line.split(QLatin1Char(';'));
+        for (int i = 0; i < m_nameColumn.size(); i++){
+            m_nameColumn.value(i).append(list1.at(i));
+        }
+
+        qDebug() << "list" << list1;
+        line = m_fileRef->readLine();
+    }
+}
+
+
+//void CSVFile::fillColumnName(){
+
+
+//    int index = 0;
+//    QString line = m_fileRef->readLine();
+
+//    while(line.contains(';') || line.contains('\n')){
+
+//        m_pairColumn = new QPair<QString, QList<QString>>;
+//        if (line.contains(';')){
+//            m_pairColumn->first = line.left(line.indexOf(';'));
+
+//            line = line.remove(0,line.indexOf(';')+1);
+//            m_listColumnName.append(*m_pairColumn);
+
+//        }
+//        else {
+//            m_pairColumn->first = line.left(line.indexOf('\r'));
+//            line = line.remove(0,line.indexOf('\r')+2);
+//            m_listColumnName.append(*m_pairColumn);
+//        }
+//        delete m_pairColumn;
+//        index++;
+//    }
+//    //    for (int i = 0; i < m_listColumnName.size(); i++) qDebug() << "column name: " << m_listColumnName.at(i);
 
 //    line = m_fileRef->readLine();
-    recursiveRegistration(line,0,0);
-}
+//    recursiveRegistration(line,0,0);
+//}
 
-void CSVFile::recursiveRegistration(QString line, int indexLine, int indexColumn){                                  //If it has been hard to write, it should be hard to read <3
 
-    line = m_fileRef->readLine();
 
-    while (line.contains(';') || line.contains('\n')){
+//void CSVFile::recursiveRegistration(QString line, int indexLine, int indexColumn){                                  //If it has been hard to write, it should be hard to read <3
 
-        m_pairColumn = new QPair<QString, QList<QString>>;
+//    //    qDebug() << line;
 
-        if (line.contains(';')){
-            m_pairColumn->second.append(line.left(line.indexOf(';')));
-            m_pairColumn->first = m_listColumnName.at(indexColumn).first;
-            m_listColumnName.replace(indexColumn, *m_pairColumn);
-            line = line.remove(0, line.indexOf(';')+1);
 
-        }
-        else if (line.contains('\n')) {
-            m_pairColumn->second.append(line.left(line.indexOf('\n')));
-            m_pairColumn->first = m_listColumnName.at(indexColumn).first;
-            m_listColumnName.replace(indexColumn, *m_pairColumn);
-            line = line.remove(0, line.indexOf('\n')+1);
-        }
-        delete m_pairColumn;
+
+//    while (line.contains(';') || line.contains('\n')){
+
+//        m_pairColumn = new QPair<QString, QList<QString>>;
+
+
+//        if (line.contains(';')){
+
+//            m_pairColumn->second.append(line.left(line.indexOf(';')));
+//            m_pairColumn->first = m_listColumnName.at(indexColumn).first;
+//            m_listColumnName.replace(indexColumn, *m_pairColumn);
+//            line = line.remove(0, line.indexOf(';')+1);
+
+//        }
+//        else if (line.contains('\n')) {
+//            m_pairColumn->second.append(line.left(line.indexOf('\n')));
+//            m_pairColumn->first = m_listColumnName.at(indexColumn).first;
+//            m_listColumnName.replace(indexColumn, *m_pairColumn);
+//            line = line.remove(0, line.indexOf('\n')+1);
+//        }
+//        delete m_pairColumn;
 
 //        qDebug() << "index ligne" << indexLine << "new value  " << m_listColumnName.at(indexColumn).first << m_listColumnName.at(indexColumn).second << m_listColumnName.at(indexColumn).second.size();
-        indexColumn++;
-    }
-    indexColumn = 0;
-    indexLine++;
+//        indexColumn++;
+//    }
+//    indexColumn = 0;
+//    indexLine++;
 
-//    if (m_listColumnName.size() < m_nbrLigne)
+//    //    if (m_listColumnName.size() < m_nbrLigne)
 
-    if (!(m_fileRef->atEnd()))
-        recursiveRegistration(line, indexLine, indexColumn);
+//    if (!(m_fileRef->atEnd())){
+//        line = m_fileRef->readLine();
+//        recursiveRegistration(line, indexLine, indexColumn);
+//    }
 
-    displayList(m_listColumnName);
+//    displayList(m_listColumnName);
 
-}
+//}
 
 
-void CSVFile::displayList(QList<QPair<QString,QList<QString>>> listColumnName){
+//void CSVFile::displayList(QList<QPair<QString,QList<QString>>> listColumnName){
 
-    for (int i = 0; i < listColumnName.size(); i++)
-        for (int j = 0; j < m_listColumnName.at(i).second.size(); j++){
-            qDebug() << "index colonne" << i << "nom de la colonne" << m_listColumnName.at(i).first << "variable " << m_listColumnName.at(j).second << "nombre de variables associees" << m_listColumnName.at(j).second.size();
-//            qDebug() << "list " << listColumnName.at(i).first << " & " << listColumnName.at(j).second;
-//            qDebug() << "list " << listColumnName.at(i).first << " & " << listColumnName.at(j).second.size();
-        }
-}
+//    for (int i = 0; i < listColumnName.size(); i++)
+//        for (int j = 0; j < m_listColumnName.at(i).second.size(); j++){
+//            qDebug() << "index colonne" << i << "nom de la colonne" << m_listColumnName.at(i).first << "variable " << m_listColumnName.at(j).second << "nombre de variables associees" << m_listColumnName.at(j).second.size();
+//            //            qDebug() << "list " << listColumnName.at(i).first << " & " << listColumnName.at(j).second;
+//            //            qDebug() << "list " << listColumnName.at(i).first << " & " << listColumnName.at(j).second.size();
+//        }
+//}
 
 
 /*
