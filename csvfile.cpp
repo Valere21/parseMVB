@@ -30,8 +30,10 @@ void CSVFile::getName(){
     while (!m_fileRef->atEnd()){
 
         line = m_fileRef->readLine();
-        QStringList list1 = line.split(QLatin1Char(';'));
+        QStringList list1 = line.split(QLatin1Char(';'));        
         for (int i = 0; i < list1.size(); i++){
+            // QString newStr = list1.at(i);
+            // m_nameColumn.at(i).append('\n' + str);           
             m_nameColumn.replace(i,m_nameColumn.at(i) + '\n' + line.at(i));
         }
     }
