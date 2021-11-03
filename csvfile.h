@@ -16,6 +16,14 @@ public:
 //    void fillData(QString line);
 //    void recursiveRegistration(QString line, int indexLine, int indexColumn);
 //    void displayList(QList<QPair<QString,QList<QString>>> listColumnName);
+<<<<<<< HEAD
+=======
+    int getMinMaxValue(QString columnName);
+    int getMoyenne(QString columnName);
+    int getTimeValueChanged(QString columnName);
+    
+    void recursiveGetValue(QString lin);
+>>>>>>> ef851b7f1376bbcf0bbebf0476ff65d012a8e8da
     void getName();
     void getData();
     void checkBoolValue();
