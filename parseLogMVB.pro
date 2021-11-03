@@ -1,4 +1,5 @@
-QT -= gui
+QT += gui
+QT += widgets
 
 CONFIG += c++11 console
 CONFIG -= app_bundle
@@ -9,6 +10,7 @@ CONFIG -= app_bundle
 
 SOURCES += \
         csvfile.cpp \
+        dialog.cpp \
         main.cpp
 
 # Default rules for deployment.
@@ -17,4 +19,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    csvfile.h
+    csvfile.h \
+    dialog.h
+
+FORMS += \
+    dialog.ui

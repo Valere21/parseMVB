@@ -1,11 +1,14 @@
 #include <QCoreApplication>
+#include <QApplication>
 #include "csvfile.h"
+#include "dialog.h"
 
 int main(int argc, char *argv[])
 {
-    QCoreApplication a(argc, argv);
+    QApplication a(argc, argv);
 
-    CSVFile csvfile;
+    Dialog dialog;
 
     return a.exec();
 }
+
