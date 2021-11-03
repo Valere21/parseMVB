@@ -4,7 +4,7 @@
 #include <QDebug>
 #include <QFile>
 #include <QPair>
-
+#include <QRegExpValidator>
 
 class CSVFile
 {
@@ -16,9 +16,11 @@ public:
 //    void fillData(QString line);
 //    void recursiveRegistration(QString line, int indexLine, int indexColumn);
 //    void displayList(QList<QPair<QString,QList<QString>>> listColumnName);
-    void recursiveGetValue(QString lin);
     void getName();
-
+    void getData();
+    void checkBoolValue();
+    bool createFileDest(QString path);
+    void recursiveGetValue(QString line);
 
 private:
 
@@ -27,8 +29,10 @@ private:
 
     QFile *m_fileRef = nullptr;
     QFile *m_fileDest = nullptr;
+    QFile *m_fileMVB = nullptr;
 
     QStringList m_nameColumn;
+    QPair<QStringList,bool> m_indexBoolValue;
 
     int m_nbrLigne;
     int m_nbrColonne;
