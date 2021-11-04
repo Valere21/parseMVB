@@ -27,7 +27,8 @@ public:
     void recursiveGetValue(QString lin);
     void getName();
     void getData();
-    void checkBoolValue(QString data, int index);
+
+    void checkBoolValue(int index, QString data);
     bool createFileDest(QString path);
 
     void initCsvFile();
@@ -55,12 +56,9 @@ private:
     QList<QList<QByteArray>*> m_listValue;
     QList<QByteArray> *m_listByteArray= nullptr;
 
-
-    QList<QPair<int, int>> m_indexBool;
-
-    QList<QPair<int, int>> m_indexBoolValue;
     //first = indexName     second = indexCountCheck
-    QList<QPair<int , int>> m_checker;
+
+    QList<QPair<int, int[5]>> m_checker;
 
 
     int m_nbrLigne;

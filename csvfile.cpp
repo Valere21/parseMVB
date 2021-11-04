@@ -30,41 +30,48 @@ int in = 0;
 
 bool isOverLimite(QPair<QString,bool> *newPair){
 
-    if (newPair->first >= 20);
+//    if (newPair->first >= 20);
 
+return newPair->second;
 }
 
 
-void CSVFile::checkBoolValue(QString data,int index){
-
-    qDebug() << "DATAAAAAAAAAAAAAAAAAAAAAAA" << data;
+void CSVFile::checkBoolValue(int index, QString data){
 
     int pos = 0;
-    QPair<QString,int> *checker = new QPair<QString,int>;
-    checker->first = data;
-    checker->second++;
-    m_checker.append(*checker);
+
+//    QVariant(s).value<T>()
 
 
     QRegExpValidator rec(QRegExp("0|1|;"));
-    QPair<int,int> *newPair = new QPair<int,int>;
-    QString str = data;
-    if (rec.validate(str, pos) == QValidator::Acceptable){
-        newPair->second = true;
+    QPair<int, int[5]> *checker = new QPair<int, int[5]>;
+    if (rec.validate(data, pos) == QValidator::Acceptable){
+        checker->first = index;
+        int val = data.toInt()+1;
+        checker->second[0] = 1;
+        checker->second[1]++;               //itération à chaque true
+        checker->second[2] = 100;           //valeur max
+        checker->second[3] = 5;             //valeur min
+
+
         //            qDebug() << "Acceptable" << index << "indicator" << in;
         //            qDebug() << data;
     }
 
     //        if (rec.validate(data, pos) == QValidator::Intermediate) qDebug() << "Intermediate" << index;
 
-    if (rec.validate(str, pos) == QValidator::Invalid){
-        newPair->second = false;
+    if (rec.validate(data, pos) == QValidator::Invalid){
+        checker->first = index;
+        checker->second[0] = 0;
+        checker->second[1] = 0;               //nombre
+        checker->second[2] = 100;           //valeur max
+        checker->second[3] = 5;             //valeur min
         //            qDebug() << "Invalid" << index << "indicator" << in;
         //            qDebug() << data;
     }
 
-    m_indexBoolValue.append(*newPair);
-    delete newPair;
+    m_checker.append(*checker);
+    delete checker;
 
     //    qDebug() << "out;";
 }
@@ -103,7 +110,8 @@ void CSVFile::getData(){
 
         for (int i = 0; i < m_listByteArray->size(); i++){
             emit si_newValue(m_nameColumn.at(i), m_listByteArray->at(i), i, i);
-            checkBoolValue(m_listByteArray->at(i), i);
+
+            checkBoolValue(i, QString(m_listByteArray->at(i)));
         }
 
         //        for (int i = 0; i < m_indexBoolValue.size(); i++) qDebug() << "BOOL :" << m_indexBoolValue.at(i);
@@ -116,7 +124,7 @@ void CSVFile::getData(){
                 //                qDebug() << indexA; indexA++;
             }
             //                  qDebug() << str;
-            checkBoolValue(str, i);
+            checkBoolValue(i, str);
             str.clear();
         }
     }
