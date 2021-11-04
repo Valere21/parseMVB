@@ -1,8 +1,5 @@
 QT += gui
-<<<<<<< HEAD
-=======
 QT += widgets
->>>>>>> 2e8d1c1f79fa28e5dc3cfd729bebd32387c9ed53
 
 CONFIG += c++11 console
 CONFIG -= app_bundle
