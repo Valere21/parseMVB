@@ -35,6 +35,9 @@ bool isOverLimite(QPair<QString,bool> *newPair){
 return newPair->second;
 }
 
+int CSVFile::getMinMaxValue(QString c){
+
+}
 
 void CSVFile::checkBoolValue(int index, QString data){
 
@@ -52,31 +55,20 @@ void CSVFile::checkBoolValue(int index, QString data){
         checker->second[1]++;               //itération à chaque true
         checker->second[2] = 100;           //valeur max
         checker->second[3] = 5;             //valeur min
-
-
-        //            qDebug() << "Acceptable" << index << "indicator" << in;
-        //            qDebug() << data;
     }
-
-    //        if (rec.validate(data, pos) == QValidator::Intermediate) qDebug() << "Intermediate" << index;
-
     if (rec.validate(data, pos) == QValidator::Invalid){
         checker->first = index;
         checker->second[0] = 0;
         checker->second[1] = 0;               //nombre
         checker->second[2] = 100;           //valeur max
         checker->second[3] = 5;             //valeur min
-        //            qDebug() << "Invalid" << index << "indicator" << in;
-        //            qDebug() << data;
     }
 
     m_checker.append(*checker);
     delete checker;
 
-    //    qDebug() << "out;";
+        qDebug() << "out;";
 }
-
-
 
 void CSVFile::getData(){
 
@@ -98,20 +90,17 @@ void CSVFile::getData(){
 
     QList<QByteArray> listSorted = m_fileRef->readLine().split(';');
 
-    emit si_getNameList(m_nameColumn);
-    emit si_getNbrCol(listSorted.size());
+    emit si_setNameList(m_nameColumn);
+    emit si_setNbrCol(listSorted.size());
 
-    qDebug() << "real" << (m_fileRef->readLine().split(';')).size();
-    qDebug() << m_fileRef->size();
 
     while (!m_fileRef->atEnd()){
+        QByteArray str2 = m_fileRef->readLine();
         m_listByteArray = new QList<QByteArray>;
         m_listByteArray = &listSorted;
-
         for (int i = 0; i < m_listByteArray->size(); i++){
             emit si_newValue(m_nameColumn.at(i), m_listByteArray->at(i), i, i);
-
-            checkBoolValue(i, QString(m_listByteArray->at(i)));
+            //checkBoolValue(i, QString(m_listByteArray->at(i)));
         }
 
         //        for (int i = 0; i < m_indexBoolValue.size(); i++) qDebug() << "BOOL :" << m_indexBoolValue.at(i);
@@ -124,10 +113,11 @@ void CSVFile::getData(){
                 //                qDebug() << indexA; indexA++;
             }
             //                  qDebug() << str;
-            checkBoolValue(i, str);
+            //checkBoolValue(i, str);
             str.clear();
         }
     }
+    emit si_setListData(*m_listByteArray);
 }
 
 // DCU_CCentrlOpen

@@ -37,26 +37,24 @@ public:
 signals:
 
     void    si_newValue(QString newName, QString newValue, int indexCol, int indexRow);
-    void    si_getNbrCol(int nbrCol);
-    void    si_getNbrRow(int nbrRow);
-    void    si_getNameList(QStringList);
+    void    si_setNbrCol(int nbrCol);
+    void    si_setNbrRow(int nbrRow);
+    void    si_setNameList(QStringList);
+    void    si_setListData(QList<QByteArray>);
+
+    private:
 
 
-private:
 
-
-
-    QFile *m_fileRef = nullptr;
+        QFile *m_fileRef = nullptr;
     QFile *m_fileDest = nullptr;
     QFile *m_fileMVB = nullptr;
 
     // Liste contenant les noms de colonnes
     QStringList m_nameColumn;
-
-    QList<QList<QByteArray>*> m_listValue;
+    //Liste contenant les valeurs
     QList<QByteArray> *m_listByteArray= nullptr;
 
-    //first = indexName     second = indexCountCheck
 
     QList<QPair<int, int[5]>> m_checker;
 

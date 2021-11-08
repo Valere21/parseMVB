@@ -11,7 +11,8 @@ CONFIG -= app_bundle
 SOURCES += \
         csvfile.cpp \
         dialog.cpp \
-        main.cpp
+        main.cpp \
+        selectperiod.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -20,7 +21,9 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     csvfile.h \
-    dialog.h
+    dialog.h \
+    selectperiod.h
 
 FORMS += \
-    dialog.ui
+    dialog.ui \
+    selectperiod.ui
