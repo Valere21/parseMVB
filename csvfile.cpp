@@ -14,8 +14,9 @@ CSVFile::CSVFile()
 }
 
 void CSVFile::initCsvFile(){
+    getName();
+    emit m_fileRef->waitForReadyRead(10000);
     getData();
-
 }
 
 bool CSVFile::createFileDest(QString path){
@@ -30,12 +31,14 @@ int in = 0;
 
 bool isOverLimite(QPair<QString,bool> *newPair){
 
-//    if (newPair->first >= 20);
+    //    if (newPair->first >= 20);
 
-return newPair->second;
+    return newPair->second;
 }
 
 int CSVFile::getMinMaxValue(QString c){
+
+
 
 }
 
@@ -43,7 +46,7 @@ void CSVFile::checkBoolValue(int index, QString data){
 
     int pos = 0;
 
-//    QVariant(s).value<T>()
+    //    QVariant(s).value<T>()
 
 
     QRegExpValidator rec(QRegExp("0|1|;"));
@@ -67,10 +70,10 @@ void CSVFile::checkBoolValue(int index, QString data){
     m_checker.append(*checker);
     delete checker;
 
-        qDebug() << "out;";
+    qDebug() << "out;";
 }
 
-void CSVFile::getData(){
+void CSVFile::getName(){
 
     QByteArray str = m_fileRef->readLine();
     QString line = str;
@@ -85,18 +88,25 @@ void CSVFile::getData(){
     m_nameColumn.append(line.left(line.indexOf('\r')));
     line = line.remove(0,line.indexOf('\r')+2);
 
-
     for (int i = 0; i < m_nameColumn.size();i++) qDebug() << m_nameColumn.at(i);
+
+    emit si_setNameList(m_nameColumn);
+    emit si_setNbrCol(m_fileRef->readLine().split(';').size());
+}
+
+void CSVFile::getData(){
+    connect(m_fileRef, SIGNAL(readyRead()), this, SLOT(onReadyReadData()));                                                                          //Connect au slot de lecture
+    if (m_fileRef->isReadable()) qDebug() << "ok";
+}
+
+void CSVFile::onReadyReadData(){
 
     QList<QByteArray> listSorted = m_fileRef->readLine().split(';');
 
-    emit si_setNameList(m_nameColumn);
-    emit si_setNbrCol(listSorted.size());
-
-
-    while (!m_fileRef->atEnd()){
+//    while (!m_fileRef->atEnd()){
+    while (!m_fileRef->bytesAvailable()){
         QByteArray str2 = m_fileRef->readLine();
-        m_listByteArray = new QList<QByteArray>;
+        m_listByteArray = new QList<QByteArray>(m_fileRef->readLine().split(';'));
         m_listByteArray = &listSorted;
         for (int i = 0; i < m_listByteArray->size(); i++){
             emit si_newValue(m_nameColumn.at(i), m_listByteArray->at(i), i, i);
@@ -118,10 +128,32 @@ void CSVFile::getData(){
         }
     }
     emit si_setListData(*m_listByteArray);
+    setListValueTime();
 }
 
 // DCU_CCentrlOpen
 
+void CSVFile::setListValueTime(){
+    qDebug() << Q_FUNC_INFO;
+    QStringList listTime;
+    int indexTime = 0;
+    qDebug() << *m_listByteArray;
+    qDebug() << *m_listByteArray->at(1);
+
+    for (int i = 0; i < m_nameColumn.size(); i++){
+//        qDebug() << "TIIIIME" << m_listByteArray->at(i);
+//        qDebug() << "loop" << m_nameColumn.size() << m_nameColumn.at(i);
+        if (m_nameColumn.at(i).contains("recv_time")){
+            indexTime = i;
+//            qDebug() << m_nameColumn.at(i) << indexTime;
+            break;
+        }
+    }
+    for (int i = 0; i < m_listByteArray->at(indexTime).size(); i++){
+        listTime.append(m_listByteArray->at(i));
+    }
+//    qDebug() << "time " << listTime;
+}
 
 
 

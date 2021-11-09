@@ -5,6 +5,7 @@
 #include "selectperiod.h"
 #include <QDialog>
 #include <QTableWidgetItem>
+#include <QStringList>
 
 namespace Ui {
 class Dialog;
@@ -18,30 +19,31 @@ public:
     explicit Dialog(QWidget *parent = nullptr);
     ~Dialog();
 
-
+    void setNameListDialog(){m_selecter->setNameList(m_nameList); qDebug() << "sens !";}
 
 public slots:
 
     //envoie de nouvelles valeurs après traitement du csv, vers la gui
-void    sl_onNewValue(QString strName, QString strValue, int indexCol, int indexRow);
+    void    sl_onNewValue(QString strName, QString strValue, int indexCol, int indexRow);
 
     //indique le nombres de lignes en fonctions de la taille du fichier csv
-void    sl_onSetNbrCol(int nbrRow);
-void    sl_onSetNbrRow(int nbrRow);
+    void    sl_onSetNbrCol(int nbrRow);
+    void    sl_onSetNbrRow(int nbrRow);
 
     //return la liste des noms de ligne, vers la gui
-void    sl_onSetNameList(QStringList listName){m_nameList = listName;}
+    void    sl_onSetNameList(QStringList listName);
+    //réceptionne l'appel de return Namelist() depuis selectperiod
+    void    sl_onAskNameList();
 
     //get les valeurs depuis csvfile, vers dialog
-void    sl_onGetListData(QList<QByteArray> listValue){m_dialogData = listValue;}
+    void    sl_onGetListData(QList<QByteArray> listValue){m_dialogData = listValue;}
 
-//signal reçu au moment du delete du selectperiod. Return la date de séléction (from & to)
-void    sl_onClosePeriod(QString fromDate, QString toDate);
+    //signal reçu au moment du delete du selectperiod. Return la date de séléction (from & to)
+    void    sl_onClosePeriod(QString fromDate, QString toDate);
 
 private slots:
-void on_toolButton_clicked();
+    void on_toolButton_clicked();
 
-void on_toolButton_2_triggered(QAction *arg1);
 
 private:
     Ui::Dialog *ui;

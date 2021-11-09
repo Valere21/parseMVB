@@ -13,9 +13,6 @@ Dialog::Dialog(QWidget *parent) :
     connect(csvFile, SIGNAL(si_setNbrRow(int)), this, SLOT(sl_onSetNbrRow(int)));
     connect(csvFile, SIGNAL(si_setNameList(QStringList)), this, SLOT(sl_onSetNameList(QStringList)));
 
-    connect(csvFile, SIGNAL(si_setListData(QList<QByteArray>)), this, SLOT(sl_onGetListData(QList<QByteArray>)));
-
-
     ui->setupUi(this);
 
     ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -80,8 +77,12 @@ void Dialog::sl_onNewValue(QString newName, QString newValue, int indexCol, int 
 void Dialog::on_toolButton_clicked()
 {
     if (!m_selecter) m_selecter = new SelectPeriod;
+    m_selecter->setNameList(m_nameList);
 
     connect(m_selecter, SIGNAL(si_closeSelectPeriod(QString,QString)), this, SLOT(sl_onClosePeriod(QString,QString)));
+    connect(m_selecter, SIGNAL(si_askGetListName()), this, SLOT(sl_onAskNameList()));
+
+    setNameListDialog();
 
     qDebug() << "new" << m_selecter;
 }
@@ -100,13 +101,28 @@ void Dialog::sl_onClosePeriod(QString fromDate, QString toDate){
 }
 
 
-
-
-
-
-
-void Dialog::on_toolButton_2_triggered(QAction *arg1)
-{
-    qDebug() << "triggered";
+void Dialog::sl_onSetNameList(QStringList listName){
+    m_nameList = listName;
 }
+
+void Dialog::sl_onAskNameList(){
+    setNameListDialog();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
