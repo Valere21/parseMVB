@@ -15,8 +15,7 @@ CSVFile::CSVFile()
 
 void CSVFile::initCsvFile(){
     getName();
-    emit m_fileRef->waitForReadyRead(10000);
-    getData();
+     getData();
 }
 
 bool CSVFile::createFileDest(QString path){
