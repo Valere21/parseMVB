@@ -12,18 +12,17 @@ Dialog::Dialog(QWidget *parent) :
     connect(csvFile, SIGNAL(si_setNbrCol(int)), this, SLOT(sl_onSetNbrCol(int)));
     connect(csvFile, SIGNAL(si_setNbrRow(int)), this, SLOT(sl_onSetNbrRow(int)));
     connect(csvFile, SIGNAL(si_setNameList(QStringList)), this, SLOT(sl_onSetNameList(QStringList)));
+    connect(csvFile, SIGNAL(si_setListDataTime(QStringList)), this, SLOT(sl_onGetListDataTime(QStringList)));
+
 
     ui->setupUi(this);
-
+    this->show();
     ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
-
-    //    ui->tableWidget->setRowCount(5);
     ui->tableWidget->setColumnCount(6);
-    this->show();
 
     csvFile->initCsvFile();
-    qDebug() << "debug";
+
 }
 void Dialog::sl_onSetNbrCol(int nbrRow){
 
@@ -74,13 +73,23 @@ void Dialog::sl_onNewValue(QString newName, QString newValue, int indexCol, int 
 
 }
 
+
 void Dialog::on_toolButton_clicked()
 {
-    if (!m_selecter) m_selecter = new SelectPeriod;
+    if (m_selecter){
+        delete  m_selecter;
+        m_selecter = nullptr;
+    }
+    m_selecter = new SelectPeriod;
     m_selecter->setNameList(m_nameList);
-
+    m_selecter->setDataTimeList(m_listDataTime);
     connect(m_selecter, SIGNAL(si_closeSelectPeriod(QString,QString)), this, SLOT(sl_onClosePeriod(QString,QString)));
     connect(m_selecter, SIGNAL(si_askGetListName()), this, SLOT(sl_onAskNameList()));
+    connect(m_selecter, SIGNAL(si_askGetListDate()), this, SLOT(sl_onAskDateList()));
+
+    connect(m_selecter, SIGNAL(si_setStartPeriod(QString)), this, SLOT(sl_onStartPeriod(QString)));
+    connect(m_selecter, SIGNAL(si_setEndPeriod(QString)), this, SLOT(sl_onEndPeriod(QString)));
+
 
     setNameListDialog();
 
@@ -92,14 +101,17 @@ void Dialog::sl_onClosePeriod(QString fromDate, QString toDate){
     m_periodChoose.first = fromDate;
     m_periodChoose.second = toDate;
 
-    if (m_selecter) delete  m_selecter;
-    m_selecter = nullptr;
     qDebug() << "quit" << m_selecter;
     ui->plainTextEdit->clear();
     if (fromDate != " ")
         ui->plainTextEdit->insertPlainText(fromDate + "   -->  " + toDate);
 }
 
+void Dialog::sl_onGetListDataTime(QStringList listTime){
+    qDebug() << "GET LIST TIME " << listTime.size();
+    m_listDataTime = listTime;
+    //    m_selecter->m_ti
+}
 
 void Dialog::sl_onSetNameList(QStringList listName){
     m_nameList = listName;
@@ -107,9 +119,12 @@ void Dialog::sl_onSetNameList(QStringList listName){
 
 void Dialog::sl_onAskNameList(){
     setNameListDialog();
+    qDebug() << Q_FUNC_INFO;
 }
 
-
+void Dialog::sl_onAskDateList(){
+    setDateListDialog();
+}
 
 
 

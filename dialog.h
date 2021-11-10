@@ -20,7 +20,7 @@ public:
     ~Dialog();
 
     void setNameListDialog(){m_selecter->setNameList(m_nameList); qDebug() << "sens !";}
-
+    void setDateListDialog(){m_selecter->setDataTimeList(m_listDataTime); qDebug() << "date !";}
 public slots:
 
     //envoie de nouvelles valeurs après traitement du csv, vers la gui
@@ -34,16 +34,22 @@ public slots:
     void    sl_onSetNameList(QStringList listName);
     //réceptionne l'appel de return Namelist() depuis selectperiod
     void    sl_onAskNameList();
+    //réceptionne l'appel de return Datelist() depuis selectperiod
+    void    sl_onAskDateList();
 
     //get les valeurs depuis csvfile, vers dialog
-    void    sl_onGetListData(QList<QByteArray> listValue){m_dialogData = listValue;}
+//    void    sl_onGetListData(QList<QByteArray> listValue){m_listData = listValue; qDebug() << "DATA " << listValue;}
+    //get les data time depuis csvfile, vers dialog
+    void    sl_onGetListDataTime(QStringList listDataTime);
 
     //signal reçu au moment du delete du selectperiod. Return la date de séléction (from & to)
     void    sl_onClosePeriod(QString fromDate, QString toDate);
 
+    void    sl_onStartPeriod(QString start){m_periodChoose.first = start; qDebug() << "FIRST " << m_periodChoose.first;}
+    void    sl_onEndPeriod(QString end){m_periodChoose.second = end; qDebug() << "SECOND " << m_periodChoose.second;}
+
 private slots:
     void on_toolButton_clicked();
-
 
 private:
     Ui::Dialog *ui;
@@ -52,7 +58,8 @@ private:
     int m_nbrCol;
     int m_nbrRow = 0;
     QStringList m_nameList;
-    QList<QByteArray> m_dialogData;
+    QList<QByteArray> m_listData;
+    QStringList m_listDataTime;
 
     QPair<QString,QString> m_periodChoose;
 

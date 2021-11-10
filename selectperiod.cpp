@@ -5,26 +5,24 @@ SelectPeriod::SelectPeriod(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::SelectPeriod)
 {
-    if (!m_period) m_period = new QPair<QDateTime,QDateTime>;
-
     ui->setupUi(this);
     show();
-    qDebug() << m_listName.size();
-    emit si_askGetListName();
     setList();
 }
 
 void SelectPeriod::setList(){
-    qDebug() << m_listName.size();
-    for (int i = 0; i < m_listName.size(); i++){
-        qDebug() << "VALUE " << m_listName.at(i);
-        ui->listWidget->addItem(m_listName.at(i));
+    qDebug() << m_timePeriod.size();
+    for (int i = 0; i < m_timePeriod.size(); i++){
+       // qDebug() << "VALUE " << m_timePeriod.at(i);
+        ui->listWidget->addItem(i + ' ' + m_timePeriod.at(i));
+        ui->listWidget_2->addItem(i + ' ' + m_timePeriod.at(i));
     }
 }
 
+
+
 SelectPeriod::~SelectPeriod()
 {
-    delete m_period;
     delete ui;
 }
 
@@ -32,10 +30,7 @@ void SelectPeriod::on_buttonBox_accepted()
 {
     //    m_period->first = ui->dateTimeEdit->dateTime();
     //    m_period->second = ui->dateTimeEdit_2->dateTime();
-    qDebug() << "date" << m_period->first << m_period->second;
 
-
-    emit si_closeSelectPeriod(m_period->first.toString(Qt::SystemLocaleShortDate),m_period->second.toString(Qt::SystemLocaleShortDate));
 }
 
 void SelectPeriod::on_buttonBox_rejected()
@@ -47,5 +42,19 @@ void SelectPeriod::on_buttonBox_rejected()
 void SelectPeriod::on_pushButton_clicked()
 {
     setList();
+}
+
+
+void SelectPeriod::on_listWidget_itemActivated(QListWidgetItem *item)
+{
+    QModelIndex index = ui->listWidget->currentIndex();
+    emit si_setStartPeriod(index.data(Qt::DisplayRole).toString());
+}
+
+
+void SelectPeriod::on_listWidget_2_itemActivated(QListWidgetItem *item)
+{
+    QModelIndex index = ui->listWidget->currentIndex();
+    emit si_setEndPeriod(index.data(Qt::DisplayRole).toString());
 }
 

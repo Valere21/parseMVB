@@ -42,11 +42,8 @@ signals:
     void    si_setNbrCol(int nbrCol);
     void    si_setNbrRow(int nbrRow);
     void    si_setNameList(QStringList);
-    void    si_setListData(QList<QByteArray>);
-
-private slots:
-
-    void    onReadyReadData();
+//    void    si_setListData(QList<QByteArray>);
+    void    si_setListDataTime(QStringList);
 
 private:
 
