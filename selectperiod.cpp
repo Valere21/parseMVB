@@ -29,6 +29,7 @@ SelectPeriod::~SelectPeriod()
 void SelectPeriod::on_buttonBox_accepted()
 {
     //    m_period->first = ui->dateTimeEdit->dateTime();
+    qDebug() << "DEBUG";
     //    m_period->second = ui->dateTimeEdit_2->dateTime();
 
 }
