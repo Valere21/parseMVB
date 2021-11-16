@@ -14,8 +14,8 @@ void SelectPeriod::setList(){
     qDebug() << m_timePeriod.size();
     for (int i = 0; i < m_timePeriod.size(); i++){
        // qDebug() << "VALUE " << m_timePeriod.at(i);
-        ui->listWidget->addItem(i + ' ' + m_timePeriod.at(i));
-        ui->listWidget_2->addItem(i + ' ' + m_timePeriod.at(i));
+       ui->listWidget->addItem(m_timePeriod.at(i));
+        ui->listWidget_2->addItem(m_timePeriod.at(i));
     }
 }
 
@@ -29,6 +29,7 @@ SelectPeriod::~SelectPeriod()
 void SelectPeriod::on_buttonBox_accepted()
 {
     //    m_period->first = ui->dateTimeEdit->dateTime();
+    emit si_acceptSelectPeriod();
     qDebug() << "DEBUG";
     //    m_period->second = ui->dateTimeEdit_2->dateTime();
 
@@ -49,13 +50,15 @@ void SelectPeriod::on_pushButton_clicked()
 void SelectPeriod::on_listWidget_itemActivated(QListWidgetItem *item)
 {
     QModelIndex index = ui->listWidget->currentIndex();
+    qDebug() << "START SELECTER" << index.data(Qt::DisplayRole).toString();
     emit si_setStartPeriod(index.data(Qt::DisplayRole).toString());
 }
 
 
 void SelectPeriod::on_listWidget_2_itemActivated(QListWidgetItem *item)
 {
-    QModelIndex index = ui->listWidget->currentIndex();
+    QModelIndex index = ui->listWidget_2->currentIndex();
+    qDebug() << "END SELECTER" << index.data(Qt::DisplayRole).toString();
     emit si_setEndPeriod(index.data(Qt::DisplayRole).toString());
 }
 

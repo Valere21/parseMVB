@@ -22,6 +22,8 @@ public:
     void setDataTimeList(QStringList listTime){m_timePeriod = listTime;}
 
 signals:
+
+    void    si_acceptSelectPeriod();
     //ferme la fenêtre depuis this, vers dialog
     void    si_closeSelectPeriod(QString, QString);
     //lance un signal sur slot dans dialog pour appeller fonction de return de list name

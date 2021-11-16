@@ -50,24 +50,35 @@ void CSVFile::getData(){
             break;
         }
     }
+    QList<QList<QByteArray>> list;
+    QList<QByteArray> listRow;
+    int indexRow = 0;
     while (!m_fileRef->atEnd()){
         m_listByteArray = new QList<QByteArray>(m_fileRef->readLine().split(';'));
         for (int i = 0; i < m_listByteArray->size(); i++){
             if (!listTime.contains(m_listByteArray->at(indexTime)))
                 listTime.append(m_listByteArray->at(indexTime));
-            emit si_newValue(m_nameColumn.at(i), m_listByteArray->at(i), i, i);
+//            qDebug() << Q_FUNC_INFO << m_listByteArray->at(i);
+            listRow.append(m_listByteArray->at(i));
+            //qDebug() << "vaaalue" << m_listByteArray->at(i);
+           // if (m_listByteArray->at(i).isEmpty()){qDebug() << "EMPTY"; emit si_newValue(m_nameColumn.at(i), " ", i, i);}
+           // else emit si_newValue(m_nameColumn.at(i), m_listByteArray->at(i), i, i);
         }
+        list.append(listRow);
+        listRow.clear();
+        indexRow++;
         QString str;
         for (int i = 0; i < m_listByteArray->size(); i++){
             for (int j = 0; j < m_listByteArray->at(i).size(); j++){
                 str.append(m_listByteArray->at(i).at(j));
             }
+            emit si_newValue(m_nameColumn.at(i), str, i, i);
             str.clear();
         }
     }
-    qDebug() << " listTime" <<  listTime.size();
+    qDebug() << " DATA LIST SIZE CSVFILE" <<  list.size();
     emit si_setListDataTime(listTime);
-//    emit si_setListData(*m_listByteArray);
+    emit si_setListData(list);
 }
 
 
@@ -87,12 +98,6 @@ bool isOverLimite(QPair<QString,bool> *newPair){
     //    if (newPair->first >= 20);
 
     return newPair->second;
-}
-
-int CSVFile::getMinMaxValue(QString c){
-
-
-
 }
 
 void CSVFile::checkBoolValue(int index, QString data){

@@ -6,7 +6,7 @@
 #include <QDialog>
 #include <QTableWidgetItem>
 #include <QStringList>
-
+#include <QWidget>
 namespace Ui {
 class Dialog;
 }
@@ -15,9 +15,24 @@ class Dialog : public QDialog
 {
     Q_OBJECT
 
+    enum {
+        bool_column,
+        min_column,
+        max_column,
+        stage_changed_column
+    };
+
 public:
     explicit Dialog(QWidget *parent = nullptr);
     ~Dialog();
+    void getBool();
+    int getMin();
+    int getMax();
+    int getMoyenne(QString columnName);
+    int getTimeValueChanged(QString columnName);
+
+    int getTimeIndexPeriod();
+    void recursiveCheck(int index, int indexRow, int indexColumn, int indexTime);
 
     void setNameListDialog(){m_selecter->setNameList(m_nameList); qDebug() << "sens !";}
     void setDateListDialog(){m_selecter->setDataTimeList(m_listDataTime); qDebug() << "date !";}
@@ -38,32 +53,38 @@ public slots:
     void    sl_onAskDateList();
 
     //get les valeurs depuis csvfile, vers dialog
-//    void    sl_onGetListData(QList<QByteArray> listValue){m_listData = listValue; qDebug() << "DATA " << listValue;}
+    void    sl_onGetListData(QList<QList<QByteArray>> listValue){m_listData = listValue; qDebug() << "DATA RECEIVE" << listValue.size();}
     //get les data time depuis csvfile, vers dialog
     void    sl_onGetListDataTime(QStringList listDataTime);
 
+    void    sl_onAcceptSelectPeriod();
     //signal reçu au moment du delete du selectperiod. Return la date de séléction (from & to)
     void    sl_onClosePeriod(QString fromDate, QString toDate);
 
-    void    sl_onStartPeriod(QString start){m_periodChoose.first = start; qDebug() << "FIRST " << m_periodChoose.first;}
-    void    sl_onEndPeriod(QString end){m_periodChoose.second = end; qDebug() << "SECOND " << m_periodChoose.second;}
+    void    sl_onStartPeriod(QString start);
+    void    sl_onEndPeriod(QString end);
 
 private slots:
     void on_toolButton_clicked();
 
+    void on_pushButton_clicked();
+
+    void on_checkBox_3_stateChanged(int arg1);
+
 private:
     Ui::Dialog *ui;
     CSVFile *csvFile = nullptr;
+    SelectPeriod *m_selecter = nullptr;
 
     int m_nbrCol;
     int m_nbrRow = 0;
+    int m_indexTime = 0;
+
     QStringList m_nameList;
-    QList<QByteArray> m_listData;
     QStringList m_listDataTime;
+    QList<QList<QByteArray>> m_listData;
+    QPair<int,int> m_periodChoose;
 
-    QPair<QString,QString> m_periodChoose;
-
-    SelectPeriod *m_selecter = nullptr;
 
 };
 

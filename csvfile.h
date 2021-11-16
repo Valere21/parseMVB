@@ -20,10 +20,7 @@ public:
     //    void recursiveRegistration(QString line, int indexLine, int indexColumn);
     //    void displayList(QList<QPair<QString,QList<QString>>> listColumnName);
 
-    int getMinMaxValue(QString columnName);
-    int getMoyenne(QString columnName);
-    int getTimeValueChanged(QString columnName);
-    
+
     void getData();
     void getName();
     void initCsvFile();
@@ -42,7 +39,7 @@ signals:
     void    si_setNbrCol(int nbrCol);
     void    si_setNbrRow(int nbrRow);
     void    si_setNameList(QStringList);
-//    void    si_setListData(QList<QByteArray>);
+    void    si_setListData(QList<QList<QByteArray>>);
     void    si_setListDataTime(QStringList);
 
 private:
