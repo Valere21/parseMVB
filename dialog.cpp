@@ -64,11 +64,11 @@ Dialog::~Dialog()
     delete ui;
 }
 
-void Dialog::sl_onNewValue(QString newName, QString newValue, int indexCol, int indexRow){
+void Dialog::sl_onNewValue(QString newName, QString newValue, int indeCol, int indexRow){
 
     //  qDebug() << "new value" << newValue;
     m_listData.value(indexRow);
-    m_listData.value(indexRow).value(indexCol) = newValue.toUtf8();
+    m_listData.value(indexRow).value(indeDZCol) = newValue.toUtf8();
     //qDebug() << "System D" << m_listData.at(indexRow).at(indexCol);
 
     QTableWidgetItem *newItem = new QTableWidgetItem(tr("%1").arg((m_nbrRow+1)*(m_nbrCol+1)));
@@ -211,8 +211,9 @@ void Dialog::getMin(){
                 m_minMaxCheck.second = listRow.at(indexRow).toInt();
                     QTableWidgetItem *newItem = new QTableWidgetItem(tr("%1").arg(m_minMaxCheck.first));
                     ui->tableWidget->setItem(indexRow, min_column, newItem);
-                    QTableWidgetItem *newItem2 = new QTableWidgetItem(tr("%1").arg(m_minMaxCheck.second));
-                    ui->tableWidget->setItem(indexRow, max_column, newItem2);
+
+                    //                    QTableWidgetItem *newItem2 = new QTableWidgetItem(tr("%1").arg(m_minMaxCheck.second));
+//                    ui->tableWidget->setItem(indexRow, max_column, newItem2);
                     indexCol++;
                     qDebug() << inde;
                     inde++;
