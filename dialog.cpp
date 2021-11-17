@@ -165,115 +165,62 @@ void Dialog::on_checkBox_3_stateChanged(int arg1)
     if (arg1){
         getBool();
     }
-
-
     if (!arg1) qDebug() << "diact";
 }
 
-enum {
-    checkRow,
-    checkCol
-};
-
-bool flag = false;
-bool checkExitRecursiveCheck(int indexRow, int indexCol, int indexSizeRow, int indexSizeCol, int checker){
-    switch (checker){
-    case checkCol :{
-        if (indexCol >= indexSizeCol)
-            flag = false;
-        else flag = true;
-    }
-    case checkRow:{
-        if (indexRow >= indexSizeRow)
-            flag = false;
-        else flag =true;
-    }
-    }
-    if (flag == false) qDebug() << "False " << indexCol << indexRow;
-    return flag;
-}
-
-void Dialog::recursiveCheck(int index, int indexRow, int indexColumn, int indexTime){
-    QList<QByteArray> list = m_listData.at(indexRow);
-    QString str = list.at(indexColumn);
-    if (index >= 50){
-        qDebug() << "get out of here";
-        QTableWidgetItem *newItem = new QTableWidgetItem(tr("%1").arg("0"));
-        ui->tableWidget->setItem(indexRow, bool_column, newItem);
-        index = 0;
-        indexRow = indexRow + checkExitRecursiveCheck(indexRow, indexColumn, m_listData.size(), list.size(), checkRow);
-        indexColumn = indexColumn  + checkExitRecursiveCheck(indexRow, indexColumn, m_listData.size(), list.size(), checkCol);
-        recursiveCheck(index,indexRow, indexColumn,indexTime);
-        return;
-    }
-
-    else if (index < 50){
-        if (indexTime < m_periodChoose.second){
-            if (str == '0'){
-                qDebug() << "bool " << m_nameList.at(indexRow) << indexColumn;
-                index++;
-                indexRow = indexRow + checkExitRecursiveCheck(indexRow, indexColumn, m_listData.size(), list.size(), checkRow);
-                indexColumn = indexColumn  + checkExitRecursiveCheck(indexRow, indexColumn, m_listData.size(), list.size(), checkCol);
-                recursiveCheck(index,indexRow, indexColumn,indexTime);
-            }
-            else {
-                qDebug() << "non bool" << str << m_nameList.at(indexRow);
-                index++;
-                indexRow = indexRow + checkExitRecursiveCheck(indexRow, indexColumn, m_listData.size(), list.size(), checkRow);
-                indexColumn = indexColumn  + checkExitRecursiveCheck(indexRow, indexColumn, m_listData.size(), list.size(), checkCol);
-                recursiveCheck(index,indexRow, indexColumn,indexTime);
-            }
-        }
-        else qDebug() << "equal" << m_periodChoose.second << indexTime;
-    }
-    qDebug() << "out";
-
-    return;
+void Dialog::on_checkBox_clicked()
+{
+getMin();
 }
 void Dialog::getBool(){
-//    if (m_periodChoose.first && m_periodChoose.second){
-//        ui->plainTextEdit->clear();
-//        qDebug() << Q_FUNC_INFO << m_periodChoose.first << m_periodChoose.second;
-//        recursiveCheck(0, 0, 0, m_periodChoose.first);
-//    }
-//    else {
-//        ui->plainTextEdit->clear();
-//        ui->plainTextEdit->insertPlainText("VEUILLEZ CHOISIR UNE PERIODE DE TEMPS");
-//    }
 
     int indexCol = 0;
     int indexRow = 0;
     int indexBool = 0;
     QList<QByteArray> listRow;
 
-    while (indexCol < m_nameList.size()){
-        while (indexRow < m_listData.size() && indexBool < 50){
+    while (indexRow < m_nameList.size()){
+        while (indexCol < m_listData.size() && indexBool < 50){
             listRow = m_listData.at(indexRow);
-            if (listRow.at(indexCol) == "0"){
-//                qDebug() << "bool simple, col" << m_nameList.at(indexCol) << "ligne " << indexRow;
+            if (listRow.at(indexRow) == "0")
                 indexBool++;
-            }
-            indexRow++;
+            indexCol++;
         }
-        if (indexBool >= 50) qDebug() << "boooool" << m_nameList.at(indexCol);
+        if (indexBool >= 50){
+            QTableWidgetItem *newItem = new QTableWidgetItem(tr("%1").arg("0"));
+            ui->tableWidget->setItem(indexRow, bool_column, newItem);
+        }
         indexBool = 0;
-        indexRow = 0;
-        indexCol++;
+        indexCol = 0;
+        indexRow++;
     }
-    qDebug() << Q_FUNC_INFO;
 }
 
+void Dialog::getMin(){
+    int indexCol = 0;
+    int indexRow = 0;
+    int inde = 0;
+    QList<QByteArray> listRow;
 
-
-
-
-
-
-
-
-
-
-
+    while (indexRow < m_nameList.size()){
+        while (indexCol < m_listData.size()){
+            listRow = m_listData.at(indexRow);
+            if (listRow.at(indexRow).toInt() <= m_minMaxCheck.first)
+                m_minMaxCheck.first = listRow.at(indexRow).toInt();
+            if (listRow.at(indexRow).toInt() >= m_minMaxCheck.second)
+                m_minMaxCheck.second = listRow.at(indexRow).toInt();
+                    QTableWidgetItem *newItem = new QTableWidgetItem(tr("%1").arg(m_minMaxCheck.first));
+                    ui->tableWidget->setItem(indexRow, min_column, newItem);
+                    QTableWidgetItem *newItem2 = new QTableWidgetItem(tr("%1").arg(m_minMaxCheck.second));
+                    ui->tableWidget->setItem(indexRow, max_column, newItem2);
+                    indexCol++;
+                    qDebug() << inde;
+                    inde++;
+        }
+        indexCol = 0;
+        indexRow++;
+    }
+}
 
 
 

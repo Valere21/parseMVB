@@ -22,17 +22,25 @@ class Dialog : public QDialog
         stage_changed_column
     };
 
+    enum {
+        check_bool,
+        check_min_max,
+        check_stage_changed
+    };
+
 public:
     explicit Dialog(QWidget *parent = nullptr);
     ~Dialog();
     void getBool();
-    int getMin();
-    int getMax();
-    int getMoyenne(QString columnName);
-    int getTimeValueChanged(QString columnName);
+    void getMin();
+    void getMax();
+    void getMoyenne(QString columnName);
+    void getTimeValueChanged(QString columnName);
+
+
+
 
     int getTimeIndexPeriod();
-    void recursiveCheck(int index, int indexRow, int indexColumn, int indexTime);
 
     void setNameListDialog(){m_selecter->setNameList(m_nameList); qDebug() << "sens !";}
     void setDateListDialog(){m_selecter->setDataTimeList(m_listDataTime); qDebug() << "date !";}
@@ -71,6 +79,8 @@ private slots:
 
     void on_checkBox_3_stateChanged(int arg1);
 
+    void on_checkBox_clicked();
+
 private:
     Ui::Dialog *ui;
     CSVFile *csvFile = nullptr;
@@ -83,7 +93,9 @@ private:
     QStringList m_nameList;
     QStringList m_listDataTime;
     QList<QList<QByteArray>> m_listData;
+
     QPair<int,int> m_periodChoose;
+    QPair<int,int> m_minMaxCheck;
 
 
 };
