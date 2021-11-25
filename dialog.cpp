@@ -170,34 +170,45 @@ void Dialog::on_checkBox_3_stateChanged(int arg1)
 
 void Dialog::on_checkBox_clicked()
 {
-    getMin();
+    getMinMaxMean();
 }
 void Dialog::getBool(){
 
     int indexCol = 0;
     int indexRow = 0;
     int indexBool = 0;
-    QList<QByteArray> listRow;
 
-    while (indexRow < m_nameList.size()){
-        while (indexCol < m_listData.size() && indexBool < 50){
-            qDebug() << "col " << m_nameList.at(indexCol);
-            listRow = m_listData.at(indexRow);
-            if (listRow.at(indexRow) == "0")
-                indexBool++;
+    for (int i = 0; i < m_nameList.size(); i++){
+        for (int j = 0; j < m_listData.size(); j++){
+            if (!(m_listData.at(indexRow).at(indexCol).isEmpty()) && indexBool < 50){
+                qDebug() << "col " << m_nameList.at(indexCol);
+                if (m_listData.at(indexRow).at(indexCol) == "0" || m_listData.at(indexRow).at(indexCol) == "1")
+                    indexBool++;
+            }
             indexCol++;
         }
         if (indexBool >= 50){
             QTableWidgetItem *newItem = new QTableWidgetItem(tr("%1").arg("0"));
-            ui->tableWidget->setItem(indexRow, bool_column, newItem);
+            ui->tableWidget->setItem(indexCol, bool_column, newItem);
         }
         indexBool = 0;
-        indexCol = 0;
-        indexRow++;
+        indexCol++;
+        indexRow = 0;
     }
 }
 
-void Dialog::getMin(){
+unsigned long computeMean(QList<QVariant> list){
+
+    unsigned long val = 0;
+    int time = 0;
+    for (int i = 0; i < list.size(); i++){
+        val += list.at(i).toInt();
+        time++;
+    }
+    return val/time;
+}
+
+void Dialog::getMinMaxMean(){
 
 
     QList<QByteArray> *list = new QList<QByteArray>;
@@ -205,42 +216,124 @@ void Dialog::getMin(){
 
     int indexCol = 0;
     int indexRow = 0;
-    int indexGui = 0;
+    int indexBool = 0;
     for (int i = 0; i < m_nameList.size(); i++){
         for (int j = 0; j < m_listData.size(); j++){
             if (!(m_listData.at(indexRow).at(indexCol).isEmpty()))
                 list->append(m_listData.at(indexRow).at(indexCol));
-
             indexRow++;
         }
         for (int i = 0; i < list->size(); i++){
             QRegExp re("\\d*");
+            QRegExp reBool("[\\0-1]");
             if (re.exactMatch(list->at(i))){
                 QVariant var = list->at(i);
                 listVariant->append(var);
+            }
+            if (reBool.exactMatch(list->at(i))){
+//                qDebug() << "exact match " << *list->at(i);
+//                indexBool++;
+
             }
         }
 
         std::sort(listVariant->begin(), listVariant->end());
 
-        if (!listVariant->isEmpty()){
-            QTableWidgetItem *newItem = new QTableWidgetItem(tr("%1").arg(QString::number(listVariant->last().toInt())));
-            ui->tableWidget->setItem(indexGui, max_column, newItem);
+        QTableWidgetItem *itemMax = new QTableWidgetItem;
+        QTableWidgetItem *itemMin = new QTableWidgetItem;
+        QTableWidgetItem *itemMean = new QTableWidgetItem;
 
-            QTableWidgetItem *newItem2 = new QTableWidgetItem(tr("%1").arg(listVariant->first().toInt()));
-            ui->tableWidget->setItem(indexGui, min_column, newItem2);
+
+        if (!listVariant->isEmpty()){
+            itemMax->setData(Qt::DisplayRole,tr("%1").arg(QString::number(listVariant->last().toInt())));
+            itemMin->setData(Qt::DisplayRole,tr("%1").arg(QString::number(listVariant->first().toInt())));
+            itemMean->setData(Qt::DisplayRole,tr("%1").arg(QString::number(computeMean(*listVariant))));
         }
-        indexGui++;
+        else{
+            itemMax->setData(Qt::DisplayRole,tr("%1").arg("NaN"));
+            itemMin->setData(Qt::DisplayRole,tr("%1").arg("NaN"));
+            itemMean->setData(Qt::DisplayRole,tr("%1").arg("NaN"));
+        }
+        ui->tableWidget->setItem(indexCol, max_column, itemMax);
+        ui->tableWidget->setItem(indexCol, min_column, itemMin);
+        ui->tableWidget->setItem(indexCol, mean_column, itemMean);
 
         indexRow = 0;
         indexCol++;
         list->clear();
         listVariant->clear();
     }
-
+    delete list;
+    delete  listVariant;
     qDebug() << "Sorted" << *list << indexCol;
 }
 
+
+
+//std::sort(listVariant->begin(), listVariant->end());
+
+//if (!listVariant->isEmpty()){
+//    itemMax->setData(Qt::DisplayRole,tr("%1").arg(QString::number(listVariant->last().toInt())));
+//    itemMin->setData(Qt::DisplayRole,tr("%1").arg(QString::number(listVariant->first().toInt())));
+//    itemMean->setData(Qt::DisplayRole,tr("%1").arg(QString::number(computeMean(*listVariant))));
+//}
+//else{
+//    itemMax->setData(Qt::DisplayRole,tr("%1").arg("NaN"));
+//    itemMin->setData(Qt::DisplayRole,tr("%1").arg("NaN"));
+//    itemMean->setData(Qt::DisplayRole,tr("%1").arg("NaN"));
+//}
+//ui->tableWidget->setItem(indexCol, max_column, itemMax);
+//ui->tableWidget->setItem(indexCol, min_column, itemMin);
+//ui->tableWidget->setItem(indexCol, mean_column, itemMean);
+////        ui->tableWidget->setItem(indexCol, bool_column, itemBool);
+
+//indexRow = 0;
+//indexBool = 0;
+//indexCol++;
+//list->clear();
+//listVariant->clear();
+//}
+//delete list;
+//delete  listVariant;
+//qDebug() << "Sorted" << *list << indexCol;
+
+
+//            if (reBool.exactMatch(list->at(i)) && indexBool < 50){
+//                itemBool->setData(Qt::DisplayRole,tr("%1").arg("NaN"));
+//                indexBool++;
+//            }
+//            else if (indexBool > 50){
+//                itemBool->setData(Qt::DisplayRole,tr("%1").arg("Bool"));
+//            }
+
+
+
+//        std::sort(listVariant->begin(), listVariant->end());
+
+//        if (!listVariant->isEmpty()){
+//            itemMax->setData(Qt::DisplayRole,tr("%1").arg(QString::number(listVariant->last().toInt())));
+//            itemMin->setData(Qt::DisplayRole,tr("%1").arg(QString::number(listVariant->first().toInt())));
+//            itemMean->setData(Qt::DisplayRole,tr("%1").arg(QString::number(computeMean(*listVariant))));
+//        }
+//        else{
+//            itemMax->setData(Qt::DisplayRole,tr("%1").arg("NaN"));
+//            itemMin->setData(Qt::DisplayRole,tr("%1").arg("NaN"));
+//            itemMean->setData(Qt::DisplayRole,tr("%1").arg("NaN"));
+//        }
+//        ui->tableWidget->setItem(indexCol, max_column, itemMax);
+//        ui->tableWidget->setItem(indexCol, min_column, itemMin);
+//        ui->tableWidget->setItem(indexCol, mean_column, itemMean);
+////        ui->tableWidget->setItem(indexCol, bool_column, itemBool);
+
+//        indexRow = 0;
+//        indexBool = 0;
+//        indexCol++;
+//        list->clear();
+//        listVariant->clear();
+//    }
+//    delete list;
+//    delete  listVariant;
+//    qDebug() << "Sorted" << *list << indexCol;
 
 
 //void Dialog::getMin(){
@@ -275,4 +368,3 @@ void Dialog::getMin(){
 //        indexCol++;
 //    }
 //}
-
