@@ -22,8 +22,6 @@ public:
     void setDataTimeList(QStringList listTime){m_timePeriod = listTime;}
 
 signals:
-
-    void    si_acceptSelectPeriod();
     //ferme la fenêtre depuis this, vers dialog
     void    si_closeSelectPeriod(QString, QString);
     //lance un signal sur slot dans dialog pour appeller fonction de return de list name
@@ -31,8 +29,9 @@ signals:
     //lance un signal sur slot dans dialog pour appeller fonction de return de list date time
     void    si_askGetListDate();
 
-    void    si_setEndPeriod(QString);
-    void    si_setStartPeriod(QString);
+    void    si_setEndPeriod(QString, int);
+    void    si_setStartPeriod(QString, int);
+    void    si_acceptPeriod();
 private slots:
     //Si période de temps accepté
     void on_buttonBox_accepted();
@@ -52,7 +51,6 @@ protected:
 
     QStringList m_listName;
     QStringList m_timePeriod;
-    QPair<QDateTime,QDateTime> *m_period = nullptr;
 };
 
 #endif // SELECTPERIOD_H

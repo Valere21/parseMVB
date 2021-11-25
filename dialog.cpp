@@ -68,7 +68,7 @@ void Dialog::sl_onNewValue(QString newName, QString newValue, int indeCol, int i
 
     //  qDebug() << "new value" << newValue;
     m_listData.value(indexRow);
-    m_listData.value(indexRow).value(indeDZCol) = newValue.toUtf8();
+    m_listData.value(indexRow).value(indeCol) = newValue.toUtf8();
     //qDebug() << "System D" << m_listData.at(indexRow).at(indexCol);
 
     QTableWidgetItem *newItem = new QTableWidgetItem(tr("%1").arg((m_nbrRow+1)*(m_nbrCol+1)));
@@ -170,7 +170,7 @@ void Dialog::on_checkBox_3_stateChanged(int arg1)
 
 void Dialog::on_checkBox_clicked()
 {
-getMin();
+    getMin();
 }
 void Dialog::getBool(){
 
@@ -181,6 +181,7 @@ void Dialog::getBool(){
 
     while (indexRow < m_nameList.size()){
         while (indexCol < m_listData.size() && indexBool < 50){
+            qDebug() << "col " << m_nameList.at(indexCol);
             listRow = m_listData.at(indexRow);
             if (listRow.at(indexRow) == "0")
                 indexBool++;
@@ -197,33 +198,81 @@ void Dialog::getBool(){
 }
 
 void Dialog::getMin(){
+
+
+    QList<QByteArray> *list = new QList<QByteArray>;
+    QList<QVariant> *listVariant = new QList<QVariant>;
+
     int indexCol = 0;
     int indexRow = 0;
-    int inde = 0;
-    QList<QByteArray> listRow;
+    int indexGui = 0;
+    for (int i = 0; i < m_nameList.size(); i++){
+        for (int j = 0; j < m_listData.size(); j++){
+            if (!(m_listData.at(indexRow).at(indexCol).isEmpty()))
+                list->append(m_listData.at(indexRow).at(indexCol));
 
-    while (indexRow < m_nameList.size()){
-        while (indexCol < m_listData.size()){
-            listRow = m_listData.at(indexRow);
-            if (listRow.at(indexRow).toInt() <= m_minMaxCheck.first)
-                m_minMaxCheck.first = listRow.at(indexRow).toInt();
-            if (listRow.at(indexRow).toInt() >= m_minMaxCheck.second)
-                m_minMaxCheck.second = listRow.at(indexRow).toInt();
-                    QTableWidgetItem *newItem = new QTableWidgetItem(tr("%1").arg(m_minMaxCheck.first));
-                    ui->tableWidget->setItem(indexRow, min_column, newItem);
-
-                    //                    QTableWidgetItem *newItem2 = new QTableWidgetItem(tr("%1").arg(m_minMaxCheck.second));
-//                    ui->tableWidget->setItem(indexRow, max_column, newItem2);
-                    indexCol++;
-                    qDebug() << inde;
-                    inde++;
+            indexRow++;
         }
-        indexCol = 0;
-        indexRow++;
+        for (int i = 0; i < list->size(); i++){
+            QRegExp re("\\d*");
+            if (re.exactMatch(list->at(i))){
+                QVariant var = list->at(i);
+                listVariant->append(var);
+            }
+        }
+
+        std::sort(listVariant->begin(), listVariant->end());
+
+        if (!listVariant->isEmpty()){
+            QTableWidgetItem *newItem = new QTableWidgetItem(tr("%1").arg(QString::number(listVariant->last().toInt())));
+            ui->tableWidget->setItem(indexGui, max_column, newItem);
+
+            QTableWidgetItem *newItem2 = new QTableWidgetItem(tr("%1").arg(listVariant->first().toInt()));
+            ui->tableWidget->setItem(indexGui, min_column, newItem2);
+        }
+        indexGui++;
+
+        indexRow = 0;
+        indexCol++;
+        list->clear();
+        listVariant->clear();
     }
+
+    qDebug() << "Sorted" << *list << indexCol;
 }
 
 
 
+//void Dialog::getMin(){
 
+//    QList<QByteArray> *listVal = new QList<QByteArray>;
+
+//    int indexCol = 0;
+//    int indexRow = 0;
+
+//    for (int i = 0; i < m_nameList.size(); i++){
+////        while (!(m_listData.at(indexRow).at(indexCol).isNull())){
+////        while (indexRow < m_listData.size()){
+//            for (int j = 0; j < m_listData.size(); j++){
+////            qDebug() << "2 " << "indexCol" << indexCol << "wich is" << m_nameList.at(indexCol) << "& indexRow" << indexRow;
+//            listVal->append(m_listData.at(indexRow).at(indexCol));
+//            indexRow++;
+//        }
+//            //        for (int i = 0; i < list->size(); i++){
+//            //            QRegExp re("\\d*");  // a digit (\d), zero or more times (*)
+//            //            if (re.exactMatch(list->at(i)))
+//            //                listVariant->append(list->at(i));
+//            //        }
+//            //        std::sort(listVariant->begin(), listVariant->end());
+//            //        QTableWidgetItem *newItem = new QTableWidgetItem(tr("%1").arg(listVariant->last().toInt()));
+//            //        ui->tableWidget->setItem(indexRow, min_column, newItem);
+
+//            //        QTableWidgetItem *newItem2 = new QTableWidgetItem(tr("%1").arg(listVariant->first().toInt()));
+//            //        ui->tableWidget->setItem(indexRow, max_column, newItem2);
+
+//        listVal->clear();
+//        indexRow = 0;
+//        indexCol++;
+//    }
+//}
 

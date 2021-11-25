@@ -7,6 +7,7 @@
 #include <QTableWidgetItem>
 #include <QStringList>
 #include <QWidget>
+#include <string.h>
 namespace Ui {
 class Dialog;
 }
